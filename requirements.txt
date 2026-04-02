@@ -1,0 +1,9 @@
+python-docx
+transformers
+sentence-transformers
+faiss-cpu
+huggingface-hub
+numpy
+torch
+requests
+streamlit
