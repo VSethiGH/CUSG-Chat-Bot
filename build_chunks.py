@@ -3,10 +3,13 @@ import json
 from pathlib import Path
 from docx import Document
 from datetime import datetime
+import pickle
 
 import numpy as np
 from sentence_transformers import SentenceTransformer
 import faiss
+
+from similarity import cosineSimilarity, euclideanSimilarity, manhattanSimilarity
 
 
 # Read each Document, and put each paragraph into the array
@@ -168,6 +171,8 @@ DATA_DIR = Path("data")
 OUTPUT_DIR = Path("index")
 CHUNK_SIZE = 1000
 OVERLAP = 250
+    
+
 
 def main():
 
@@ -225,6 +230,19 @@ def main():
     faiss_index = faiss.IndexFlatL2(dim)
     faiss_index.add(embeddings) 
     faiss.write_index(faiss_index, str(OUTPUT_DIR / "faiss.index"))
+
+    # Custom Indexes
+    cosine_index = cosineSimilarity(embeddings)
+    with open(OUTPUT_DIR / "cosine_index.pkl", "wb") as f:
+        pickle.dump(cosine_index, f)
+
+    manhattan_index = manhattanSimilarity(embeddings)
+    with open(OUTPUT_DIR / "manhattan_index.pkl", "wb") as f:
+        pickle.dump(manhattan_index, f)
+
+    euclidean_index = euclideanSimilarity(embeddings)
+    with open(OUTPUT_DIR / "euclidean_index.pkl", "wb") as f:
+        pickle.dump(euclidean_index, f)
 
 if __name__ == "__main__":
     main()
