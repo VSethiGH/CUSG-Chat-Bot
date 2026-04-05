@@ -54,7 +54,7 @@ def create_chunks(text):
     return chunks
 
 def process_agenda_file(file_path):
-    print("Processing: ", file_path)
+    print(file_path)
     
     # Get the Date (last bit of content)
     # File name = data/agenda/Senate Agenda 1-12-2026.docx
@@ -82,7 +82,7 @@ def process_agenda_file(file_path):
     return formatted_chunks
 
 def process_bill_file(file_path):
-    print("Processing: ", file_path)
+    print(file_path)
     
 
     # Example 70_SB_03.docx
@@ -113,7 +113,7 @@ def process_bill_file(file_path):
     return formatted_chunks
 
 def process_minutes_file(file_path):
-    print("Processing: ", file_path)
+    print(file_path)
     
     # Get the Date (last bit of content)
     # File name = data/agenda/Senate Agenda 1-12-2026.docx
@@ -141,7 +141,7 @@ def process_minutes_file(file_path):
     return formatted_chunks
 
 def process_bylaws_file(file_path):
-    print("Processing: ", file_path)
+    print(file_path)
     
     file_id = file_path.stem.replace(" ", "_").lower()
     full_text = docx_to_text(file_path)
@@ -211,18 +211,19 @@ def main():
         for chunk in all_chunks:
             f.write(json.dumps(chunk, ensure_ascii=False) + '\n')
     
-    print(f"Processed {len(all_chunks)} chunks")
-    print(f"Index saved to: {output_file}")
+    print(f"# of Chunks: {len(all_chunks)}")
 
-
-    print(f"Embedding Chunks...")
     model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
-    texts = [chunk["content"] for chunk in all_chunks]
-    embeddings = model.encode(texts, show_progress_bar=True, normalize_embeddings=True)
+    chunks_content = [chunk["content"] for chunk in all_chunks]
+
+    embeddings = model.encode(chunks_content, show_progress_bar=True, normalize_embeddings=True)
+    # (chunk size, 768)
+
     embeddings = np.array(embeddings).astype("float32")
+
     dim = embeddings.shape[1]
     faiss_index = faiss.IndexFlatL2(dim)
-    faiss_index.add(embeddings)
+    faiss_index.add(embeddings) 
     faiss.write_index(faiss_index, str(OUTPUT_DIR / "faiss.index"))
 
 if __name__ == "__main__":
