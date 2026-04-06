@@ -6,7 +6,8 @@ class cosineSimilarity:
         self.embeddings = embeddings
     
     def search(self, vec, top_k):
-        numerators = self.embeddings @ vec.T  # Matrix Multiplication 
+        vec = vec.reshape(-1)
+        numerators = self.embeddings @ vec # Matrix Multiplication
 
         denom_chunks = np.linalg.norm(self.embeddings, axis = 1)
         denom_vec = np.linalg.norm(vec)

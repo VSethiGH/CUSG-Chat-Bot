@@ -169,7 +169,7 @@ def process_bylaws_file(file_path):
 
 DATA_DIR = Path("data")
 OUTPUT_DIR = Path("index")
-CHUNK_SIZE = 1000
+CHUNK_SIZE = 500
 OVERLAP = 250
     
 
