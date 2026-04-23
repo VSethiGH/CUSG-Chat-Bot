@@ -9,7 +9,7 @@ from huggingface_hub import InferenceClient
 import pickle
 from similarity import cosineSimilarity, euclideanSimilarity, manhattanSimilarity
 
-HF_TOKEN = "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"
+HF_TOKEN = ""
 LLM_MODEL = "meta-llama/Meta-Llama-3-8B-Instruct"        
 EMBED_MODEL = "all-MiniLM-L6-v2"                        
 TOP_K = 10                                    
